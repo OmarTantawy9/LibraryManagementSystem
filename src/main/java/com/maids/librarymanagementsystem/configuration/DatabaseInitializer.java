@@ -1,11 +1,14 @@
 package com.maids.librarymanagementsystem.configuration;
 
 import com.maids.librarymanagementsystem.model.Book;
+import com.maids.librarymanagementsystem.model.Patron;
 import com.maids.librarymanagementsystem.repository.BookRepository;
+import com.maids.librarymanagementsystem.repository.PatronRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +18,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
 
     private final BookRepository bookRepository;
+
+    private final PatronRepository patronRepository;
 
     @Override
     public void run(String... args) {
@@ -43,6 +48,35 @@ public class DatabaseInitializer implements CommandLineRunner {
         );
 
         bookRepository.saveAll(books);
+
+
+        /*******************************************************************************************************/
+
+        List<Patron> patrons = Arrays.asList(
+                new Patron(null, "Patron Name 1", "123-456-7890", "patron1@example.com"),
+                new Patron(null, "Patron Name 2", "234-567-8901", "patron2@example.com"),
+                new Patron(null, "Patron Name 3", "345-678-9012", "patron3@example.com"),
+                new Patron(null, "Patron Name 4", "456-789-0123", "patron4@example.com"),
+                new Patron(null, "Patron Name 5", "567-890-1234", "patron5@example.com"),
+                new Patron(null, "Patron Name 6", "678-901-2345", "patron6@example.com"),
+                new Patron(null, "Patron Name 7", "789-012-3456", "patron7@example.com"),
+                new Patron(null, "Patron Name 8", "890-123-4567", "patron8@example.com"),
+                new Patron(null, "Patron Name 9", "901-234-5678", "patron9@example.com"),
+                new Patron(null, "Patron Name 10", "012-345-6789", "patron10@example.com"),
+                new Patron(null, "Patron Name 11", "111-222-3333", "patron11@example.com"),
+                new Patron(null, "Patron Name 12", "222-333-4444", "patron12@example.com"),
+                new Patron(null, "Patron Name 13", "333-444-5555", "patron13@example.com"),
+                new Patron(null, "Patron Name 14", "444-555-6666", "patron14@example.com"),
+                new Patron(null, "Patron Name 15", "555-666-7777", "patron15@example.com"),
+                new Patron(null, "Patron Name 16", "666-777-8888", "patron16@example.com"),
+                new Patron(null, "Patron Name 17", "777-888-9999", "patron17@example.com"),
+                new Patron(null, "Patron Name 18", "888-999-0000", "patron18@example.com"),
+                new Patron(null, "Patron Name 19", "999-000-1111", "patron19@example.com"),
+                new Patron(null, "Patron Name 20", "000-111-2222", "patron20@example.com")
+        );
+
+        patronRepository.saveAll(patrons);
+
 
     }
 }
