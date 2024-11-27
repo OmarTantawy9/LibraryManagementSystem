@@ -38,7 +38,7 @@ public class BookController {
 
     //Add a new book to the library
     @PostMapping("/books")
-    private ResponseEntity<BookDTO> addBook(@Valid @RequestBody BookDTO bookDTO){
+    public ResponseEntity<BookDTO> addBook(@Valid @RequestBody BookDTO bookDTO){
         BookDTO savedBookDTO = bookService.addBook(bookDTO);
         return new ResponseEntity<>(savedBookDTO, HttpStatus.CREATED);
     }
