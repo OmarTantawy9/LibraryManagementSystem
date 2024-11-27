@@ -13,4 +13,5 @@ public interface BorrowingRecordRepository extends JpaRepository<BorrowingRecord
 
     List<BorrowingRecord> findAllByBookAndPatronOrderByBorrowingRecordIdDesc(Book book, Patron patron);
 
+    List<BorrowingRecord> findAllByBookOrderByBorrowingRecordIdDesc(Book book);
 }

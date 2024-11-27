@@ -5,8 +5,11 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -27,6 +30,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> ConstraintViolationExceptionHandler(ConstraintViolationException e){
 
         String violationMessage = e.getConstraintViolations().iterator().next().getMessage();
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(violationMessage, false);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e){
+
+        String violationMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(violationMessage, false);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);

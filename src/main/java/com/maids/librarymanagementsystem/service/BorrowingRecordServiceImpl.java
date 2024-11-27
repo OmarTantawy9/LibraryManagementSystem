@@ -39,11 +39,18 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
         Patron patron = patronRepository.findById(patronId)
                 .orElseThrow(() -> new ResourceNotFoundException("Patron", "patronId", patronId));
 
-        List<BorrowingRecord> borrowingsRecords = borrowingRepository.findAllByBookAndPatronOrderByBorrowingRecordIdDesc(book, patron);
+        List<BorrowingRecord> borrowingsRecords = borrowingRepository.findAllByBookOrderByBorrowingRecordIdDesc(book);
 
-        // Check if the Patron have already borrowed the book and did not return it
         if(!borrowingsRecords.isEmpty() && borrowingsRecords.get(0).getReturnDate() == null){
-            throw new APIException("Book was already borrowed by patron");
+
+            // Check if the Patron have already borrowed the book and did not return it
+            if(patron == borrowingsRecords.get(0).getPatron()){
+                throw new APIException("Book was already borrowed by this patron");
+            }
+            // Check if Another Patron have already borrowed the book and did not return it
+            else {
+                throw new APIException("Book was already borrowed by another patron");
+            }
         }
 
         BorrowingRecord borrowingRecord = BorrowingRecord.builder()

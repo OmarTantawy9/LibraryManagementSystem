@@ -1,6 +1,6 @@
 #FileLock
-#Wed Nov 27 09:21:40 EET 2024
-hostName=Tantawy.mshome.net
-id=1936c7f46f8b266698f2cd4e67379d9ba9fc1f5b79d
+#Wed Nov 27 12:09:48 EET 2024
+hostName=host.docker.internal
+id=1936d19344c8c771dd0f8c9519d59f77c98b180375c
 method=file
-server=172.19.144.1\:61355
+server=192.168.2.101\:59038
