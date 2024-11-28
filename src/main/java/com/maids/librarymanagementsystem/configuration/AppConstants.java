@@ -8,5 +8,7 @@ public class AppConstants {
     public static final String SORT_ORDER = "asc";
     public static final String BOOK_VALID_ISBN_REGEX = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$";
     public static final String PHONE_NUMBER_REGEX = "^\\+?(\\d{1,3})?[-.\\s]?\\(?\\d{1,4}\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$";
+    public static final String BOOKS_CACHE = "books";
+    public static final String PATRONS_CACHE = "patrons";
 
 }

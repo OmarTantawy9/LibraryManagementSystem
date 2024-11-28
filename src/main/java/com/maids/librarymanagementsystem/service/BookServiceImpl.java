@@ -1,5 +1,6 @@
 package com.maids.librarymanagementsystem.service;
 
+import com.maids.librarymanagementsystem.configuration.AppConstants;
 import com.maids.librarymanagementsystem.exception.APIException;
 import com.maids.librarymanagementsystem.exception.ResourceNotFoundException;
 import com.maids.librarymanagementsystem.model.Book;
@@ -9,6 +10,9 @@ import com.maids.librarymanagementsystem.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,14 +59,13 @@ public class BookServiceImpl implements BookService {
                 .lastPage(bookPage.isLast())
                 .build();
 
-
-
         return bookResponse;
-
     }
 
     @Override
+    @Cacheable(value = AppConstants.BOOKS_CACHE, key = "#bookId")
     public BookDTO getBookById(Long bookId) {
+
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book", "bookId", bookId));
 
@@ -71,6 +74,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    @CachePut(value = AppConstants.BOOKS_CACHE, key = "#result.bookId")
     public BookDTO addBook(BookDTO bookDTO) {
 
         // Check if the book already exists
@@ -87,6 +91,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    @CachePut(value = AppConstants.BOOKS_CACHE, key = "#bookId")
     public BookDTO updateBook(BookDTO bookDTO, Long bookId) {
 
         Book book = bookRepository.findById(bookId)
@@ -106,6 +111,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    @CacheEvict(value = AppConstants.BOOKS_CACHE, key = "#bookId")
     public BookDTO deleteBook(Long bookId) {
 
         Book book = bookRepository.findById(bookId)

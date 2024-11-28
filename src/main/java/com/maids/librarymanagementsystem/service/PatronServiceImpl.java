@@ -1,5 +1,6 @@
 package com.maids.librarymanagementsystem.service;
 
+import com.maids.librarymanagementsystem.configuration.AppConstants;
 import com.maids.librarymanagementsystem.exception.APIException;
 import com.maids.librarymanagementsystem.exception.ResourceNotFoundException;
 import com.maids.librarymanagementsystem.model.Patron;
@@ -10,6 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,20 +50,22 @@ public class PatronServiceImpl implements PatronService {
                 .map(patron -> modelMapper.map(patron, PatronDTO.class))
                 .toList();
 
-        PatronResponse patronResponse = new PatronResponse(
-                patronDTOS,
-                pageNumber,
-                pageSize,
-                patronsPage.getTotalElements(),
-                patronsPage.getTotalPages(),
-                patronsPage.isLast()
-        );
+
+        PatronResponse patronResponse = PatronResponse.builder()
+                .content(patronDTOS)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalElements(patronsPage.getTotalElements())
+                .totalPages(patronsPage.getTotalPages())
+                .lastPage(patronsPage.isLast())
+                .build();
 
         return patronResponse;
 
     }
 
     @Override
+    @Cacheable(value = AppConstants.PATRONS_CACHE, key = "#patronId")
     public PatronDTO getPatronById(Long patronId) {
 
         Patron patron = patronRepository.findById(patronId)
@@ -70,6 +76,7 @@ public class PatronServiceImpl implements PatronService {
 
     @Transactional
     @Override
+    @CachePut(value = AppConstants.PATRONS_CACHE, key = "#result.patronId")
     public PatronDTO addPatron(PatronDTO patronDTO) {
 
         if(patronRepository.existsByPatronEmail(patronDTO.getPatronEmail())){
@@ -90,6 +97,7 @@ public class PatronServiceImpl implements PatronService {
 
     @Transactional
     @Override
+    @CachePut(value = AppConstants.PATRONS_CACHE, key = "#patronId")
     public PatronDTO updatePatron(PatronDTO patronDTO, Long patronId) {
 
         Patron patron = patronRepository.findById(patronId)
@@ -107,6 +115,7 @@ public class PatronServiceImpl implements PatronService {
 
     @Transactional
     @Override
+    @CacheEvict(value = AppConstants.PATRONS_CACHE, key = "#patronId")
     public PatronDTO deletePatron(Long patronId) {
 
         Patron patron = patronRepository.findById(patronId)

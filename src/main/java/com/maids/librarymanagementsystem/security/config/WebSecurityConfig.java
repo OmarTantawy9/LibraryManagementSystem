@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,6 +35,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authRequest ->
                         authRequest.requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers(HttpMethod.POST).hasAuthority("ADMIN_ROLE")
                                 .requestMatchers(HttpMethod.PUT).hasAuthority("ADMIN_ROLE")
                                 .requestMatchers(HttpMethod.DELETE).hasAuthority("ADMIN_ROLE")
@@ -41,7 +43,12 @@ public class WebSecurityConfig {
 
                 )
                 .authenticationProvider(authProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers(
+                        headers -> headers.frameOptions(
+                                HeadersConfigurer.FrameOptionsConfig::sameOrigin
+                        )
+                );
 
         return httpSecurity.build();
 

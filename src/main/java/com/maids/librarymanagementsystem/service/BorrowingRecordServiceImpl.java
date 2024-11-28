@@ -78,7 +78,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
         List<BorrowingRecord> borrowingRecords = borrowingRepository.findAllByBookAndPatronOrderByBorrowingRecordIdDesc(book, patron);
 
         if(borrowingRecords.isEmpty()){
-            throw new APIException("Patron with patronId: " + patronId + " didn't borrow Book with bookId: " + bookId);
+            throw new APIException("Patron with patronId: " + patronId + " never borrowed Book with bookId: " + bookId);
         }
 
         // Get the most recent Borrowing Record
