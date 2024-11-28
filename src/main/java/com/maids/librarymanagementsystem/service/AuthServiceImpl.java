@@ -8,7 +8,6 @@ import com.maids.librarymanagementsystem.security.payload.LoginRequest;
 import com.maids.librarymanagementsystem.security.payload.SignUpRequest;
 import com.maids.librarymanagementsystem.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

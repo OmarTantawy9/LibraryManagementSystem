@@ -28,7 +28,7 @@ public class Patron {
     private Long patronId;
 
     @NotBlank(message = "Name Must be Provided")
-    @Size(min = 3, max = 50, message = "Patron Name Must atleast be 3 letters long and at most 30 letters long")
+    @Size(min = 3, max = 50, message = "Patron Name Must at least be 3 letters long and at most 50 letters long")
     private String patronName;
 
     @NotBlank(message = "Phone Number Must be Provided")
